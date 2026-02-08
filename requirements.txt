@@ -1,0 +1,4 @@
+#python-fasthtml>=0.6.0
+python-fasthtml @ git+https://github.com/AnswerDotAI/fasthtml.git
+sqlalchemy>=2.0.0
+uvicorn>=0.24.0
