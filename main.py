@@ -51,7 +51,7 @@ app, rt = fast_app(
                 --p123-orange-light: #FF8C42;
                 --p123-dark-bg: #1a1a1a;
                 --p123-card-bg: #242424;
-                --p123-input-bg: #2d2d2d;
+                --p123-input-bg: #666464;
                 --p123-border: rgba(255, 107, 53, 0.2);
                 --p123-text: #ffffff;
                 --p123-text-muted: #b0b0b0;
