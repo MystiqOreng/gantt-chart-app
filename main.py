@@ -51,7 +51,7 @@ app, rt = fast_app(
                 --p123-orange-light: #FF8C42;
                 --p123-dark-bg: #1a1a1a;
                 --p123-card-bg: #242424;
-                --p123-input-bg: #666464; 
+                --p123-input-bg: #2d2d2d;
                 --p123-border: rgba(255, 107, 53, 0.2);
                 --p123-text: #ffffff;
                 --p123-text-muted: #b0b0b0;
@@ -421,6 +421,20 @@ app, rt = fast_app(
     )
 )
 
+# Force HTTPS redirect (for production deployment)
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import RedirectResponse as StarletteRedirect
+
+class HTTPSRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        # Only redirect in production (when not localhost)
+        if request.url.scheme == "http" and "localhost" not in request.url.hostname:
+            url = request.url.replace(scheme="https")
+            return StarletteRedirect(str(url), status_code=301)
+        return await call_next(request)
+
+app.add_middleware(HTTPSRedirectMiddleware)
+
 # ── Helper Functions ──────────────────────────────────────────────────
 
 def categorize_tasks(tasks):
@@ -473,7 +487,7 @@ def task_card_kanban(task, project_id, view="kanban"):
     return Div(
         Div(task.name, cls="kanban-card-title"),
         Div(task.description or "No description", cls="kanban-card-desc"),
-        Div(f"{task.start_date.strftime('%d %b')} → {task.end_date.strftime('%d %b')}", cls="kanban-card-meta"),
+        Div(f"{task.start_date.strftime('%m/%d')} → {task.end_date.strftime('%m/%d')}", cls="kanban-card-meta"),
         Div(
             Div(style=f"width: {task.progress}%", cls="kanban-progress-fill"),
             cls="kanban-progress"
